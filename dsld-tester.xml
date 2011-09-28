@@ -69,7 +69,7 @@
           installs grails into STS
      - - - - - - - - - - - - - - - - - -->
 	<target name="install.grails" depends="init">
-		<run.eclipse.application eclipse.loc="${sts.location}" appname="com.springsource.sts.grails.core.install" args="-data ${work.directory}/workspace -location ${grails.dir}/${grails.intstall.name}" />
+		<run.eclipse.application eclipse.loc="${sts.location}" appname="com.springsource.sts.grails.core.install" args="-data ${work.directory}/workspace -location ${grails.dir}/${grails.intstall.name}" vmargs="${extra.vm.args}/>
 	</target>
 
 	<!-- - - - - - - - - - - - - - - - - - 
@@ -86,7 +86,7 @@
     - - - - - - - - - - - - - - - - - -->
 	<target name="run.checker" depends="init">
 		<run.eclipse.application eclipse.loc="${sts.location}" appname="org.codehaus.groovy.eclipse.dsl.staticCheck" 
-			args="-data ${work.directory}/workspace -os ${build.os} -ws ${build.ws} -arch ${build.arch} --result_file ${result.file} --project_path ${work.directory}/${grails.project.name} ${grails.project.name}" vmargs="-XstartOnFirstThread -Xmx1024M -XX:PermSize=64M -XX:MaxPermSize=128M" />
+			args="-data ${work.directory}/workspace -os ${build.os} -ws ${build.ws} -arch ${build.arch} --result_file ${result.file} --project_path ${work.directory}/${grails.project.name} ${grails.project.name}" vmargs="-Xmx1024M -XX:PermSize=64M -XX:MaxPermSize=128M ${extra.vm.args}" />
 	</target>
 
 
