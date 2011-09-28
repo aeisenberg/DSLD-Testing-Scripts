@@ -63,7 +63,7 @@
 	<macrodef name="run.eclipse.application">
 		<attribute name="appname" />
 		<attribute name="args" />
-		<attribute name="vmargs" default="-Xmx1024M -XX:PermSize=64M -XX:MaxPermSize=128M -d32"/>
+		<attribute name="vmargs" default="-Xmx1024M -XX:PermSize=64M -XX:MaxPermSize=128M"/>
 		<attribute name="eclipse.loc" />
 		<sequential>
 			<echo message="Launching Eclipse application @{appname} with args @{args} and vmargs @{vmargs}" />
