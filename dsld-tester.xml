@@ -69,7 +69,7 @@
           installs grails into STS
      - - - - - - - - - - - - - - - - - -->
 	<target name="install.grails" depends="init">
-		<run.eclipse.application eclipse.loc="${sts.location}" appname="com.springsource.sts.grails.core.install" args="-data ${work.directory}/workspace -location ${grails.dir}/${grails.intstall.name}" vmargs="${extra.vm.args}/>
+		<run.eclipse.application eclipse.loc="${sts.location}" appname="com.springsource.sts.grails.core.install" args="-data ${work.directory}/workspace -location ${grails.dir}/${grails.intstall.name}" vmargs="${extra.vm.args}" />
 	</target>
 
 	<!-- - - - - - - - - - - - - - - - - - 
