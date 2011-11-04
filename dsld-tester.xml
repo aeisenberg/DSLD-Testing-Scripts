@@ -86,7 +86,7 @@
     - - - - - - - - - - - - - - - - - -->
 	<target name="run.checker" depends="init">
 		<run.eclipse.application eclipse.loc="${sts.location}" appname="org.codehaus.groovy.eclipse.dsl.staticCheck" 
-			args="-data ${work.directory}/workspace -os ${build.os} -ws ${build.ws} -arch ${build.arch} --result_file ${result.file} --project_path ${work.directory}/${grails.project.name} ${grails.project.name}" vmargs="-Xmx1024M -XX:PermSize=64M -XX:MaxPermSize=128M ${extra.vm.args}" />
+			args="-data ${work.directory}/workspace -os ${build.os} -ws ${build.ws} -arch ${build.arch} --includes grails-app/domain/**/*.groovy|grails-app/controllers/**/*.groovy|grails-app/services/**/*.groovy|grails-app/taglib/**/*.groovy|test/unit/**/*.groovy  --result_file ${result.file} --project_path ${work.directory}/${grails.project.name} ${grails.project.name}" vmargs="-Xmx1024M -XX:PermSize=64M -XX:MaxPermSize=128M ${extra.vm.args}" />
 	</target>
 
 
