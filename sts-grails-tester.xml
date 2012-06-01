@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="dsld-tester" basedir="." default="run">
+	<import file="get-dependencies.xml" />
+	<import file="git-macros.xml" />
+	<!-- ================================= 
+          target: run                    
+          Runs all targets
+    ================================= -->
+	<target name="run" depends="init,clean,provision.sts,get.grails,install.grails,get.project,run.checker" description="Performs all tasks to run the DSLD checker on the appropriate grails project" />
+
+
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: init                   
+          initializes properties and ensures working directory exists
+    - - - - - - - - - - - - - - - - - -->
+	<target name="init">
+		<property file="tester.properties" />
+		<property name="grails.dir" location="${work.directory}/grails" />
+		<property name="sts.location" value="${work.directory}/springsource/${sts.name}" />
+	</target>
+
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: clean
+          cleans the target directory
+         - - - - - - - - - - - - - - - - - -->
+	<target name="clean" depends="init">
+		<delete dir="${work.directory}" failonerror="false" />
+	</target>
+
+
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: provision.sts          
+          unzips STS and ensures Groovy/
+          Grails tooling is installed
+    - - - - - - - - - - - - - - - - - -->
+	<target name="provision.sts" depends="init">
+		<mkdir dir="${work.directory}" />
+		<antcall target="unpack-archive">
+			<param name="theFile" value="${sts.archive}" />
+			<param name="theDir" value="${work.directory}" />
+		</antcall>
+		<install-feature eclipse.loc="${sts.location}" updatesite.url="http://dist.codehaus.org/groovy/distributions/greclipse/snapshot/e3.7/" feature.id="org.codehaus.groovy.eclipse.feature" />
+		<install-feature eclipse.loc="${sts.location}" updatesite.url="http://dist.codehaus.org/groovy/distributions/greclipse/snapshot/e3.7/" feature.id="org.codehaus.groovy18.feature" />
+		<install-feature eclipse.loc="${sts.location}" updatesite.url="http://dist.springsource.com/snapshot/TOOLS/nightly/e3.7" feature.id="com.springsource.sts.grails" />
+	</target>
+
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: get.grails
+          downloads the latest grails snapshot
+          and unpacks it into the working directory
+    - - - - - - - - - - - - - - - - - -->
+	<target name="get.grails" depends="init">
+		<delete dir="${grails.dir}" failonerror="false" />
+		<mkdir dir="${grails.dir}" />
+
+		<antcall target="downloadFile">
+			<param name="theURL" value="${grails.url}" />
+			<param name="theFile" value="${grails.zip.name}" />
+			<param name="downloadsDir" value="${grails.dir}" />
+		</antcall>
+		<antcall target="unpack-archive">
+			<param name="theFile" value="${grails.dir}/${grails.zip.name}" />
+			<param name="theDir" value="${grails.dir}" />
+		</antcall>
+	</target>
+
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: install.grails         
+          installs grails into STS
+     - - - - - - - - - - - - - - - - - -->
+	<target name="install.grails" depends="init">
+		<run.eclipse.application eclipse.loc="${sts.location}" appname="com.springsource.sts.grails.core.install" args="-data ${work.directory}/workspace -location ${grails.dir}/${grails.intstall.name}" vmargs="${extra.vm.args}" />
+	</target>
+
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: run.tests           
+          runs the type checking
+    - - - - - - - - - - - - - - - - - -->
+	<target name="run.checker" depends="init">
+		<run.eclipse.application eclipse.loc="${sts.location}" appname="org.codehaus.groovy.eclipse.dsl.staticCheck" 
+			args="-data ${work.directory}/workspace -os ${build.os} -ws ${build.ws} -arch ${build.arch} --includes grails-app/domain/|grails-app/controllers/|grails-app/services/|grails-app/taglib/|test/unit/  --result_file ${result.file} --project_path ${work.directory}/${grails.project.name} ${grails.project.name}" vmargs="-Xmx1024M -XX:PermSize=64M -XX:MaxPermSize=256M ${extra.vm.args}" />
+	</target>
+
+
+</project>
